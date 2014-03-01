@@ -1,3 +1,4 @@
+#!/bin/bash
 here=$PWD
 mkdir $HOME/grabs
 cd
