@@ -1,0 +1,18 @@
+function up() {
+    cd ..
+}
+
+function cl() {
+    cd $1
+    ls
+}
+
+function grab() {
+    curl inst.eecs.berkeley.edu/~cs${1}-${2}/${3} > ~/grabs/${3}
+}
+
+function post() {
+    base=`basename $1`
+    mv $1 ~/public_html/${base}
+    chmod -R 744 ~/public_html/${base}
+}
