@@ -1,5 +1,6 @@
 function up() {
     cd ..
+    ls
 }
 
 function cl() {
