@@ -17,3 +17,22 @@ function post() {
     mv $1 ~/public_html/${base}
     chmod -R 744 ~/public_html/${base}
 }
+
+function gs() {
+    git status
+}
+
+function gc() {
+    git add . && git commit
+}
+
+function gpp() {
+    git pull --rebase && git push
+}
+
+alias ap="ansible-playbook -i inventory"
+alias please='sudo $(history -p \!\!)' 
+
+source `brew --prefix`/etc/bash_completion
+source `brew --prefix git`/etc/bash_completion.d/git-completion.bash
+export PS1='\h `date "+%H:%M:%S"`:\W$(__git_ps1)\$ '
