@@ -10,7 +10,7 @@ A script that makes a few changes to your environment:<br>
   -It appends the settings in LauAlieses.txt (described below) to your .bash_profile. If you instead need them in your .bashrc, append the file manually<br>
 
 To run: paste/run the following command on a Unix command line:
-`curl https://raw.github.com/davidopluslau/Fundamental-Code/master/Lauiform.sh > ./Lauiform.sh && source Lauiform.sh && rm Lauiform.sh`
+`curl https://raw.githubusercontent.com/davidopluslau/Fundamental-Code/master/Lauiform.sh > ./Lauiform.sh && source Lauiform.sh && rm Lauiform.sh`
   
 LauAliases.txt
 ---
