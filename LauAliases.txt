@@ -22,8 +22,8 @@ function gs() {
     git status
 }
 
-function gc() {
-    git add . && git commit
+function gl() {
+    git log
 }
 
 function gpp() {
