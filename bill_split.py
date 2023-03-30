@@ -182,7 +182,7 @@ class Bill:
                 item_shares_by_person[person].append(ItemShare(item.name, share * item.cost))
         print(item_shares_by_person)
 
-        tax_tip_surcharge = self.grand_total / self.subtotal
+        tax_tip_surcharge = Bill.round_up(self.grand_total / self.subtotal)
         print(f"Tax + Tip Surcharge: {tax_tip_surcharge}")
         for person in item_shares_by_person:
             item_shares = item_shares_by_person[person]
