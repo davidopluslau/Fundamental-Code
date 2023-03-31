@@ -25,7 +25,7 @@ class Item:
     def __str__(self):
         breakdown = [f" {person}: {self.cost * self.shares[person]}" for person in self.shares]
         breakdown_formatted = "\n".join(breakdown)
-        return f"Item: {self.name}\nCost: ${self.cost}\nBreakdown:\n{breakdown_formatted}"
+        return f"Item: {self.name}\nCost: ${self.cost}\nBreakdown:\n${breakdown_formatted}"
 
     def __repr__(self):
         return str(self)
@@ -88,10 +88,10 @@ class Bill:
                 continue
             self.items.append(Item(item_name, cost, shares))
             print("\nRunning bill:")
-            Bill.print_list(self.items)
+            print(*self.items, sep="\n")
             print()
         if running_cost != self.subtotal:
-            Bill.print_list(self.items)
+            print(*self.items, sep="\n")
             raise Exception(f"Uh oh, running cost ${running_cost} doesn't match the subtotal "
                             f"${self.subtotal}")
 
@@ -121,7 +121,7 @@ class Bill:
                 return shares
             shares[person] = 1
             print("\nCurrent payers")
-            Bill.print_list(shares.keys())
+            print(*shares.keys(), sep="\n")
             print()
 
     def handle_share_split_item(self):
@@ -137,7 +137,7 @@ class Bill:
                                   "first person and \"0.33\" for the other three\n"))
             shares[person] = share
             print("\nCurrent payers")
-            Bill.print_list(shares.keys())
+            print(*shares.keys(), sep="\n")
             print()
 
     def assign_totals(self):
@@ -171,7 +171,7 @@ class Bill:
             else:
                 self.people.append(person)
             print("\nPeople so far:")
-            Bill.print_list(self.people)
+            print(*self.people, sep="\n")
             print()
 
     def print_assignments(self):
@@ -182,25 +182,30 @@ class Bill:
                 item_shares_by_person[person].append(ItemShare(item.name, share * item.cost))
         print(item_shares_by_person)
 
-        tax_tip_surcharge = Bill.round_up(self.grand_total / self.subtotal)
-        print(f"Tax + Tip Surcharge: {tax_tip_surcharge}")
+        tax_tip_surcharge = self.grand_total / self.subtotal
+        tax_tip_surcharge_display = Bill.round_up(tax_tip_surcharge - Decimal(1)) * Decimal(100)
+        print(f"Tax + Tip Surcharge: {tax_tip_surcharge_display}%\n")
+        calculated_total = Decimal(0)
+        output = []
         for person in item_shares_by_person:
             item_shares = item_shares_by_person[person]
             final_share = Bill.round_up(
                 sum(item_share.cost for item_share in item_shares) * tax_tip_surcharge)
-            print(f"{person}: ${final_share}")
+            calculated_total += final_share
+            output.append(f"{person}: ${final_share}")
             for item_share in item_shares_by_person[person]:
-                print(f"  {item_share.name}: ${Bill.round_up(item_share.cost)}")
-            print()
+                output.append(f"  {item_share.name}: ${Bill.round_up(item_share.cost)}")
+        # We're rounding all people up to the nearest penny; make sure the calculated total is no
+        # more than n cents more than the check grand total
+        if calculated_total > self.grand_total + (Decimal(len(self.people)) / Decimal(100)):
+            print(f"Calculations were off; the check has a grand total of ${self.grand_total} but "
+                  f"the calculations summed to ${calculated_total}")
+        else:
+            print(*output, sep="\n")
 
     @staticmethod
     def round_up(number):
         return number.quantize(Decimal("0.00"), rounding=ROUND_UP)
-
-    @staticmethod
-    def print_list(things):
-        for thing in things:
-            print(thing)
 
 
 Bill().calculate()
